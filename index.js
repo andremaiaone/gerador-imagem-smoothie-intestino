@@ -3,38 +3,47 @@ const { createCanvas, loadImage, registerFont } = require('canvas');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 
-// Registra uma fonte mais bonita
-registerFont(path.join(__dirname, 'assets', 'fonts', 'Poppins-Bold.ttf'), { family: 'Poppins' });
+// Registrar a fonte
+registerFont(path.join(__dirname, 'ativos', 'fontes', 'Poppins-Bold.ttf'), { family: 'Poppins' });
 
-app.get('/webhook/aline', async (req, res) => {
-  try {
-    const name = req.query.name || 'Aluno';
-    const canvas = createCanvas(768, 960);
+app.get('/webhook/aluno', async (req, res) => {
+    const { name } = req.query;
+
+    if (!name) {
+        return res.status(400).send('Nome é obrigatório.');
+    }
+
+    const largura = 1080;
+    const altura = 1350;
+    const canvas = createCanvas(largura, altura);
     const ctx = canvas.getContext('2d');
 
-    const background = await loadImage(path.join(__dirname, 'assets', 'images', 'smoothie.png'));
-    ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    try {
+        const imagemBase = await loadImage(path.join(__dirname, 'ativos', 'imagens', 'Design sem nome (37).png'));
 
-    ctx.font = 'bold 36px "Poppins"';
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.fillText(name.toUpperCase(), canvas.width / 2, 700); // posição abaixo do smoothie
+        ctx.drawImage(imagemBase, 0, 0, largura, altura);
 
-    res.setHeader('Content-Type', 'image/png');
-    canvas.pngStream().pipe(res);
+        ctx.font = 'bold 36px "Poppins"';
+        ctx.fillStyle = '#000000'; // Cor preta
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(name, largura / 2, 960); // Ajuste fino na posição vertical
 
-  } catch (error) {
-    console.error('Erro ao gerar imagem:', error);
-    res.status(500).send('Erro ao gerar imagem.');
-  }
+        res.setHeader('Content-Type', 'image/png');
+        canvas.pngStream().pipe(res);
+
+    } catch (error) {
+        console.error('Erro ao gerar imagem:', error);
+        res.status(500).send('Erro ao gerar imagem.');
+    }
 });
 
 app.get('/', (req, res) => {
-  res.send('Servidor rodando. Use /webhook/aline?name=SEUNOME');
+    res.send('Servidor do Gerador de Imagens do Smoothie ativo.');
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+app.listen(port, () => {
+    console.log(`Servidor rodando na porta ${port}`);
 });
