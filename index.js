@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Registro da fonte (corrigido para 'assets')
+// Registro da fonte
 registerFont(path.join(__dirname, 'assets', 'fonts', 'Poppins-Bold.ttf'), {
     family: 'Poppins',
 });
@@ -18,7 +18,7 @@ app.get('/webhook/smoothie', async (req, res) => {
             return res.status(400).send('Parâmetro "name" é obrigatório');
         }
 
-        // Caminho da imagem de fundo (corrigido para 'assets')
+        // Caminho da imagem de fundo
         const backgroundPath = path.join(__dirname, 'assets', 'images', 'Design sem nome (37).png');
         const background = await loadImage(backgroundPath);
 
@@ -51,7 +51,7 @@ app.get('/webhook/smoothie', async (req, res) => {
     }
 });
 
-// Rota simples para ver se o servidor está online
+// Rota simples para testar o servidor
 app.get('/', (req, res) => {
     res.send('Servidor do Gerador de Smoothie ativo!');
 });
