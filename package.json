@@ -1,7 +1,7 @@
 {
   "name": "gerador-imagem-smoothie-intestino",
   "version": "1.0.0",
-  "description": "Gera imagem com nome no Smoothie para o Desafio Intestino Renovado.",
+  "description": "Gerador de imagens com nome no Smoothie para o Desafio Intestino Renovado",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
