@@ -5,12 +5,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Registro da fonte
-registerFont(path.join(__dirname, 'assets', 'fonts', 'Poppins-Bold.ttf'), {
+// Registro da fonte (corrigido para usar a pasta 'ativos')
+registerFont(path.join(__dirname, 'ativos', 'fontes', 'Poppins-Bold.ttf'), {
     family: 'Poppins',
 });
 
-// Rota principal
+// Rota principal para gerar o smoothie com o nome
 app.get('/webhook/smoothie', async (req, res) => {
     try {
         const name = req.query.name;
@@ -18,8 +18,8 @@ app.get('/webhook/smoothie', async (req, res) => {
             return res.status(400).send('Parâmetro "name" é obrigatório');
         }
 
-        // Caminho da imagem de fundo
-        const backgroundPath = path.join(__dirname, 'assets', 'images', 'Design sem nome (37).png');
+        // Caminho da imagem de fundo (corrigido para usar 'ativos')
+        const backgroundPath = path.join(__dirname, 'ativos', 'imagens', 'Design sem nome (37).png');
         const background = await loadImage(backgroundPath);
 
         // Criar canvas
@@ -37,7 +37,7 @@ app.get('/webhook/smoothie', async (req, res) => {
 
         // Coordenadas para centralizar o nome
         const textX = canvas.width / 2;
-        const textY = 940; // Ajustado para abaixo da faixa preta
+        const textY = 940; // Ajustado para a faixa preta
 
         ctx.fillText(name, textX, textY);
 
