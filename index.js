@@ -5,11 +5,12 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-// Corrigido para usar assets/fonts
+// Registro da fonte (corrigido para 'assets')
 registerFont(path.join(__dirname, 'assets', 'fonts', 'Poppins-Bold.ttf'), {
     family: 'Poppins',
 });
 
+// Rota principal
 app.get('/webhook/smoothie', async (req, res) => {
     try {
         const name = req.query.name;
@@ -17,24 +18,30 @@ app.get('/webhook/smoothie', async (req, res) => {
             return res.status(400).send('Parâmetro "name" é obrigatório');
         }
 
+        // Caminho da imagem de fundo (corrigido para 'assets')
         const backgroundPath = path.join(__dirname, 'assets', 'images', 'Design sem nome (37).png');
         const background = await loadImage(backgroundPath);
 
+        // Criar canvas
         const canvas = createCanvas(background.width, background.height);
         const ctx = canvas.getContext('2d');
 
+        // Desenhar a imagem de fundo
         ctx.drawImage(background, 0, 0);
 
+        // Configurar o texto
         ctx.font = 'bold 50px "Poppins"';
         ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
 
+        // Coordenadas para centralizar o nome
         const textX = canvas.width / 2;
-        const textY = 940;
+        const textY = 940; // Ajustado para abaixo da faixa preta
 
         ctx.fillText(name, textX, textY);
 
+        // Retornar a imagem gerada
         res.setHeader('Content-Type', 'image/png');
         canvas.pngStream().pipe(res);
 
@@ -44,10 +51,12 @@ app.get('/webhook/smoothie', async (req, res) => {
     }
 });
 
+// Rota simples para ver se o servidor está online
 app.get('/', (req, res) => {
     res.send('Servidor do Gerador de Smoothie ativo!');
 });
 
+// Iniciar servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
